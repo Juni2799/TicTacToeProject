@@ -27,7 +27,7 @@ public class Player {
 
         //TODO: validate the row and col entered by the player | ex : inbound checks, filled or not filled etc
         while(invalidInput(row, col, board) || invalidCell(row, col, board)){
-            System.out.println(this.name + "Please enter row and col for a empty cell and within board dimension:");
+            System.out.println(this.name + " Please enter row and col for a empty cell and within board dimension:");
             System.out.println("Row:");
             row = sc.nextInt();
             System.out.println("Column:");

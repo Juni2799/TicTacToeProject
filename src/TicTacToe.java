@@ -16,12 +16,14 @@ public class TicTacToe {
         System.out.println("Welcome to TicTacToe Game");
         System.out.println("Please enter the dimension for the board");
         int dimension = sc.nextInt();
+
         System.out.println("Do you want a bot in the game ? Y or N");
         String botAns = sc.next();
         if(botAns.equalsIgnoreCase("Y")){
             Player bot = new Bot(id++, '$', BotDifficultyLevel.HARD);
             players.add(bot);
         }
+
         while(id < dimension){
             System.out.println("Please enter the player name:");
             String playerName = sc.next();
@@ -31,28 +33,46 @@ public class TicTacToe {
             players.add(newPlayer);
         }
         Collections.shuffle(players); //randomise the player list
+
         Game game = gameController.createGame(dimension, players, WinningStrategyName.ORDERONEWINNINGSTRATEGY);
 
         boolean replayGame;
         do{
             int playerIndex = -1;
-            while(game.getGameStatus().equals(GameStatus.IN_PROGRESS)){
-                System.out.println("Current board status");
-                gameController.displayBoard(game);
+            System.out.println("Current board status");
+            gameController.displayBoard(game);
 
+            while(game.getGameStatus().equals(GameStatus.IN_PROGRESS)){
                 playerIndex++;
                 playerIndex = playerIndex % players.size();
                 Move movePlayed = gameController.executeMove(game, players.get(playerIndex));
+                System.out.println("Current board status");
+                gameController.displayBoard(game);
+
+                gameController.updateMovesList(game, movePlayed);
+                gameController.updateBoardStatesList(game);
+
+                if(players.get(playerIndex).getPlayerType().equals(PlayerType.HUMAN)){
+                    System.out.println("Do you want to undo previous move ? Y or N");
+                    String undoAnswer = sc.next();
+                    if(undoAnswer.equalsIgnoreCase("y")){
+                        // do undo
+                        gameController.undoMove(game, movePlayed);
+                        movePlayed = gameController.executeMove(game, players.get(playerIndex));
+
+                        System.out.println("Current board status");
+                        gameController.displayBoard(game);
+                    }
+                }
+
                 Player winner = gameController.checkWinner(game, movePlayed);
                 if(winner != null){
                     System.out.println("WINNER IS : " + winner.getName());
                     game.setGameStatus(GameStatus.WINNER);
                     break;
                 }
-
-                gameController.updateMovesList(game, movePlayed);
-                gameController.updateBoardStatesList(game);
             }
+
             System.out.println("Final Board Status");
             gameController.displayBoard(game);
             System.out.println("Do you want to replay? Y or N");

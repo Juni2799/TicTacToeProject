@@ -32,12 +32,12 @@ public class GameController {
         return game.getWinningStrategy().checkWinner(game.getCurrentBoard(), lastMovePlayed);
     }
 
-    public Board undoMove(Game game, Move lastPlayedMove){
+    // Currently, the project only undoes one move
+    // Plan to add a feature later where you can undo the game till a given point
+    public void undoMove(Game game, Move lastPlayedMove){
         List<Move> moves = game.getMoves();
-        int cellRow = lastPlayedMove.getCell().getRow();
-        int cellCol = lastPlayedMove.getCell().getCol();
-        game.getCurrentBoard().getMatrix().get(cellRow).get(cellCol).setCellState(CellState.EMPTY);
         lastPlayedMove.getCell().setCellState(CellState.EMPTY);
+        lastPlayedMove.getCell().setPlayer(null);
         moves.remove(moves.size() - 1);
 
         game.setMoves(moves);
@@ -46,7 +46,6 @@ public class GameController {
         boardStates.remove(boardStates.size() - 1);
         game.setBoardStates(boardStates);
 
-        return boardStates.get(boardStates.size() - 1);
     }
 
     public Game replayGame(Game game){
