@@ -1,7 +1,7 @@
 package controller;
 
 import model.*;
-import service.winningStrategy.WinningStrategy;
+import service.drawingStrategy.DrawingStrategyFactory;
 import service.winningStrategy.WinningStrategyFactory;
 import service.winningStrategy.WinningStrategyName;
 
@@ -30,6 +30,12 @@ public class GameController {
 
     public Player checkWinner(Game game, Move lastMovePlayed){
         return game.getWinningStrategy().checkWinner(game.getCurrentBoard(), lastMovePlayed);
+    }
+
+    // Function to check is the game ended with a draw or not
+    // Need to try and optimise further
+    public boolean checkDraw(Board board){
+        return DrawingStrategyFactory.getDrawingStrategy(board).isDraw(board);
     }
 
     // Currently, the project only undoes one move

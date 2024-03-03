@@ -71,6 +71,13 @@ public class TicTacToe {
                     game.setGameStatus(GameStatus.WINNER);
                     break;
                 }
+
+                boolean gameDrawStatus = gameController.checkDraw(game.getCurrentBoard());
+                if(gameDrawStatus){
+                    System.out.println("Game is ended at a Draw!!");
+                    game.setGameStatus(GameStatus.DRAW);
+                    break;
+                }
             }
 
             System.out.println("Final Board Status");
